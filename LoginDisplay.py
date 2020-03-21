@@ -6,7 +6,6 @@ class LoginDisplay:
     def __init__(self,user):
         self.user = user # temporary
         self.submit = False
-        self.loggedIn = False
 
     # temporary for testing
     # @staticmethod
@@ -33,11 +32,16 @@ class LoginDisplay:
         if st.button('Submit'):
             user = self.getUser(username)
             if self.login(user,passwordHash):
-                self.loggedIn = True
+                loggedIn = True
+                resultUser = user
             else:
+                loggedIn = False
+                resultUser = None
                 st.write('## Login failed')
-
-        return self.loggedIn
+        else:
+            return False,None
+        return loggedIn,resultUser
+        
 if __name__ == "__main__":
     user = User('Aru','arumugam123456789@gmail.com',sha256('1'.encode('utf-8')).hexdigest(),'',1,1)
     f = LoginDisplay(user).renderDisplay()
