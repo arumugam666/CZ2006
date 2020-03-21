@@ -2,8 +2,6 @@ import streamlit as st
 from User import User
 from hashlib import sha256
 
-user = User('Aru','arumugam123456789@gmail.com',sha256('1'.encode('utf-8')).hexdigest(),'',1,1)
-
 class LoginDisplay:
     def __init__(self,user):
         self.user = user # temporary
@@ -41,5 +39,6 @@ class LoginDisplay:
 
         return self.loggedIn
 if __name__ == "__main__":
+    user = User('Aru','arumugam123456789@gmail.com',sha256('1'.encode('utf-8')).hexdigest(),'',1,1)
     f = LoginDisplay(user).renderDisplay()
     print(f)
