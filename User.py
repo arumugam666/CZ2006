@@ -48,7 +48,7 @@ class User:
         self.__updateEmail = newUpdateEmail
         return True
 
-    def getUpdateFrequency(self, newUpdateFrequency):
+    def setUpdateFrequency(self, newUpdateFrequency):
         self.__updateFrequency = newUpdateFrequency
         return True
     
