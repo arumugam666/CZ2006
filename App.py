@@ -11,8 +11,6 @@ from streamlit.ScriptRequestQueue import RerunData
 
 def App():
     session_state = SessionState.get(loggedIn = False,selectedOption = "Home",user = None)
-
-    user = User('Aru','arumugam123456789@gmail.com',sha256('1'.encode('utf-8')).hexdigest(),'',1,1)
     
     if session_state.loggedIn:
         # print("here")
@@ -24,14 +22,13 @@ def App():
         loginButton = st.sidebar.button("Login")
         if loginButton:
             session_state.selectedOption = "Login"
-            user = User('Aru','arumugam123456789@gmail.com',sha256('1'.encode('utf-8')).hexdigest(),'',1,1)
 
     homeButton = st.sidebar.button("Home")
     if homeButton:
         session_state.selectedOption = "Home"
 
     if session_state.selectedOption == "Login":
-        loggedIn,user = LoginDisplay(user).renderDisplay()
+        loggedIn,user = LoginDisplay().renderDisplay()
         if loggedIn:
             session_state.loggedIn = loggedIn
             session_state.user = user
@@ -42,5 +39,5 @@ def App():
         SearchDisplay().renderDisplay()
 
     elif session_state.selectedOption == "Profile":
-        IndividualDisplay(session_state.user).renderDisplay()
+        print(IndividualDisplay(session_state.user).renderDisplay())
 App()

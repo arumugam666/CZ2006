@@ -2,7 +2,7 @@ import streamlit as st
 from User import User
 from hashlib import sha256
 
-class IndividualDisplay:
+class EditProfileDisplay:
 
     def __init__(self,user):
         self.__user = user
@@ -22,13 +22,10 @@ class IndividualDisplay:
         st.write(self.__user.getUpdateEmail())
         st.write('Update Frequency','< {}'.format(self.__user.getUpdateFrequency()))
         st.write('Update Confidence Level','< {}'.format(self.__user.getUpdateConfidence()))
-        if st.button('Edit Profile'):
-            return True
-        else:
-            return False
+
 
 
 if __name__ == "__main__":
     user = User('Aru','arumugam123456789@gmail.com',sha256('1'.encode('utf-8')).hexdigest(),'arumugam123456789@gmail.com',1,1)
 
-    IndividualDisplay(user).renderDisplay()
+    EditProfileDisplay(user).renderDisplay()
