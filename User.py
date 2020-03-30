@@ -1,3 +1,5 @@
+import requests
+
 class User:
     baseId = 1
     def __init__(self,userName,loginEmail,passwordHash,updateEmail,updateFrequency,updateConfidence):
@@ -69,11 +71,11 @@ class User:
         else:
             return False
     
-    def addStockToWatchList(stock):
+    def addStockToWatchList(self,stock):
         self.__watchList.append(stock)
         return True
     
-    def removeStockFromWatchList(stock):
+    def removeStockFromWatchList(self,stock):
         if isinstance(stock,int):
             try:
                 self.__watchList.pop(stock)
@@ -86,3 +88,19 @@ class User:
                 return True
             except:
                 return False
+    
+    def postUser(self):
+        url = "https://us-central1-cz2006-9cd2d.cloudfunctions.net/app/addUser"
+
+        watchListTemp = []
+
+        for stock in self.__watchList:
+            watchListTemp.append(str(stock))
+
+        payload = "{\r\n\t\"userName\":\""+self.__userName+"\",\r\n\t\"passwordHash\":\""+self.__passwordHash+"\",\r\n\t\"loginEmail\": \""+self.__loginEmail+"\",\r\n\t\"updateEmail\": \""+self.__updateEmail+"\",\r\n\t\"updateFrequency\": \""+str(self.__updateFrequency)+"\",\r\n\t\"updateConfidence\": \""+str(self.__updateConfidence)+"\",\r\n\t\"watchList\": "+str(watchListTemp)+"\r\n}"
+        headers = {
+        'Content-Type': 'application/json',
+        'Content-Type': 'application/json'
+        }
+
+        response = requests.request("POST", url, headers=headers, data = payload)

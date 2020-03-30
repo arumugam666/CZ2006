@@ -10,19 +10,19 @@ class LoginDisplay:
     # consider using firebase to handle data
     @staticmethod
     def getUser(userName):
-        url = "http://localhost:5001/cz2006-9cd2d/us-central1/app/user/"+userName
+        url = "https://us-central1-cz2006-9cd2d.cloudfunctions.net/app/user/"+userName
         headers = {
         'Content-Type': 'application/json',
         'Content-Type': 'application/json'
         }
         response = requests.request("GET", url, headers=headers)
         user = response.json()
-        user = User(user["userName"],user["loginEmail"],user["passwordHash"],user["updateEmail"],user["updateFrequency"],user["updateConfidence"])
+        user = User(user["userName"],user["loginEmail"],user["passwordHash"],user["updateEmail"],int(user["updateFrequency"]),int(user["updateConfidence"]))
         return user
 
     @staticmethod
     def login(userName,passwordHash):
-        url = "http://localhost:5001/cz2006-9cd2d/us-central1/app/verifyPassword"
+        url = "https://us-central1-cz2006-9cd2d.cloudfunctions.net/app/verifyPassword"
 
         payload = payload = "{\r\n\t\"userName\":\""+userName+"\",\r\n\t\"passwordHash\":\""+passwordHash+"\"\r\n}"
         headers = {
@@ -41,7 +41,7 @@ class LoginDisplay:
         username = st.text_input("Username")
         password = st.text_input("Password",type = 'password')
         passwordHash = sha256(password.encode('utf-8')).hexdigest()
-        if st.button('Submit'):
+        if st.button('Login',key = "loginButton"):
             resultUser = LoginDisplay.login(username,passwordHash)
             if resultUser:
                 loggedIn = True
