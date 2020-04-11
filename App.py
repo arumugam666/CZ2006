@@ -1,14 +1,15 @@
 import streamlit as st
-from SearchDisplay import SearchDisplay
-from LoginDisplay import LoginDisplay
-from User import User
+from View.SearchDisplay import SearchDisplay
+from View.LoginDisplay import LoginDisplay
+from Model.User import User
 from hashlib import sha256
-import SessionState
-from IndividualDisplay import IndividualDisplay
-from st_rerun import rerun
+import StreamlitExtras.SessionState as SessionState
+from View.IndividualDisplay import IndividualDisplay
+from StreamlitExtras.st_rerun import rerun
 from streamlit.ScriptRunner import StopException, RerunException
 from streamlit.ScriptRequestQueue import RerunData
-from EditProfileDisplay import EditProfileDisplay
+from View.EditProfileDisplay import EditProfileDisplay
+from View.SignUpDisplay import SignUpDisplay
 
 def App():
     session_state = SessionState.get(loggedIn = False,selectedOption = "Home",user = None)
@@ -28,6 +29,7 @@ def App():
         if logoutButton:
             session_state.selectedOption = "Login"
             session_state.loggedIn = False
+            session_state.user = None
             rerun()
         
     else:
@@ -48,15 +50,22 @@ def App():
             rerun()
 
     elif session_state.selectedOption == "Home":
-        SearchDisplay().renderDisplay()
+        if SearchDisplay().renderDisplay(session_state.user):
+            session_state.user.postUser()
+            rerun()
 
     elif session_state.selectedOption == "Profile":
         if IndividualDisplay(session_state.user).renderDisplay():
             session_state.selectedOption = "Edit Profile"
             rerun()
 
-    elif session_state.selectedOption == "Sign up":
-        pass
+    elif session_state.selectedOption == "Sign Up":
+        created, user = SignUpDisplay().renderDisplay()
+        if created:
+            session_state.user = user
+            session_state.loggedIn = True
+            session_state.selectedOption ="Profile"
+            rerun()
 
     elif session_state.selectedOption == "Edit Profile":
         if (EditProfileDisplay(session_state.user).renderDisplay()):
